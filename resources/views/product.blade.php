@@ -94,8 +94,13 @@
             </div>
 
             <!-- CTA Buttons -->
+            @php
+                $waNumber = env('WHATSAPP_NUMBER', '6281234567890');
+                $waMessage = 'Halo, saya ingin membeli:' . "\n\n" . '*Produk:* ' . $product->name . "\n" . '*Jumlah:* 1 pcs' . "\n" . '*Harga:* Rp' . number_format($product->price, 0, ',', '.') . "\n\n" . 'Mohon konfirmasi ketersediaan. Terima kasih!';
+                $waHref = 'https://wa.me/' . $waNumber . '?text=' . rawurlencode($waMessage);
+            @endphp
             <div class="cta-buttons">
-                <a href="#" id="waLink" target="_blank" class="btn-primary-action wa-btn">
+                <a href="{{ $waHref }}" id="waLink" target="_blank" class="btn-primary-action wa-btn">
                     <img class="btn-icon" src="{{ asset('images/icon/whatsapp.png') }}" alt="WhatsApp">
                     Pesan via WhatsApp
                 </a>

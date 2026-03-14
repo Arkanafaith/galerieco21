@@ -351,6 +351,41 @@
         .btn:active {
             transform: translateY(0);
         }
+
+        /* Admin pagination (Laravel links()) - keep small & tidy */
+        .admin-content nav[role="navigation"] {
+            margin-top: 14px;
+        }
+
+        .admin-content nav[role="navigation"] .flex {
+            gap: 8px;
+        }
+
+        .admin-content nav[role="navigation"] a,
+        .admin-content nav[role="navigation"] span {
+            font-size: 13px !important;
+            line-height: 1.2 !important;
+        }
+
+        /* Buttons/links */
+        .admin-content nav[role="navigation"] a {
+            padding: 6px 10px !important;
+            border-radius: 8px !important;
+            text-decoration: none !important;
+            white-space: nowrap;
+        }
+
+        /* Page number pills (if present) */
+        .admin-content nav[role="navigation"] [aria-current="page"] span {
+            padding: 6px 10px !important;
+            border-radius: 8px !important;
+        }
+
+        /* Prevent oversized pagination SVGs */
+        .admin-content nav[role="navigation"] svg {
+            width: 16px !important;
+            height: 16px !important;
+        }
     </style>
 </head>
 <body>

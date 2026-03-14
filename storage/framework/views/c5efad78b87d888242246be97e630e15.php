@@ -23,9 +23,9 @@ $products = \App\Models\Product::all();
             
             <div class="hero-stats">
                 <div class="hero-avatars">
-                    <img src="https://ui-avatars.com/api/?name=User+1&background=random" alt="User">
-                    <img src="https://ui-avatars.com/api/?name=User+2&background=random" alt="User">
-                    <img src="https://ui-avatars.com/api/?name=User+3&background=random" alt="User">
+                    <img src="<?php echo e(asset('images/icon/woman1_thumb.jpg')); ?>" alt="Pelanggan 1" width="36" height="36" decoding="async">
+                    <img src="<?php echo e(asset('images/icon/woman2_thumb.jpg')); ?>" alt="Pelanggan 2" width="36" height="36" decoding="async">
+                    <img src="<?php echo e(asset('images/icon/men_thumb.jpg')); ?>" alt="Pelanggan 3" width="36" height="36" decoding="async">
                 </div>
                 <span><?php echo e(ContentHelper::get('hero_stock_text', '10k+ Pelanggan Mempercayai')); ?></span>
             </div>
@@ -207,9 +207,9 @@ $products = \App\Models\Product::all();
         <span class="section-badge">PRODUCTS</span>
         <h2 class="section-title">Buah tangan khas Banyumas</h2>
         
-        <div class="products-grid-4">
+        <div class="products-grid-4" id="allProductsGrid">
             <?php $__empty_1 = true; $__currentLoopData = $products; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-                <a href="<?php echo e(route('product.show', $product->id)); ?>" class="product-card-small">
+                <a href="<?php echo e(route('product.show', $product->id)); ?>" class="product-card-small all-product-item">
                     <?php if($product->image): ?>
                         <img src="/<?php echo e($product->image); ?>" alt="<?php echo e($product->name); ?>" class="product-image">
                     <?php else: ?>
@@ -229,15 +229,147 @@ $products = \App\Models\Product::all();
         </div>
         
         <!-- Pagination -->
-        <div class="pagination">
-            <a href="#">←</a>
-            <span class="active">1</span>
-            <a href="#">2</a>
-            <a href="#">3</a>
-            <a href="#">→</a>
-        </div>
+        <div class="pagination" id="allProductsPagination" aria-label="Pagination Produk"></div>
     </div>
 </section>
+
+<script>
+(function () {
+    function initAllProductsPagination() {
+        var grid = document.getElementById('allProductsGrid');
+        var pager = document.getElementById('allProductsPagination');
+        if (!grid || !pager) return;
+
+        var items = Array.prototype.slice.call(grid.querySelectorAll('.all-product-item'));
+        if (!items.length) {
+            pager.style.display = 'none';
+            return;
+        }
+
+        function getColumns() {
+            try {
+                var cols = getComputedStyle(grid).gridTemplateColumns;
+                if (!cols || cols === 'none') return 4;
+                return cols.split(' ').filter(Boolean).length || 4;
+            } catch (e) {
+                return 4;
+            }
+        }
+
+        var currentPage = 1;
+        var columns = getColumns();
+        var perPage = Math.max(1, columns * 2); // 2 rows
+        var totalPages = Math.max(1, Math.ceil(items.length / perPage));
+
+        function clampPage(p) {
+            return Math.min(totalPages, Math.max(1, p));
+        }
+
+        function showPage(page) {
+            currentPage = clampPage(page);
+            var start = (currentPage - 1) * perPage;
+            var end = start + perPage;
+
+            items.forEach(function (el, idx) {
+                el.style.display = (idx >= start && idx < end) ? '' : 'none';
+            });
+
+            renderPager();
+        }
+
+        function createLink(label, onClick, isDisabled) {
+            var a = document.createElement('a');
+            a.href = '#';
+            a.textContent = label;
+            if (isDisabled) {
+                a.style.pointerEvents = 'none';
+                a.style.opacity = '0.5';
+            } else {
+                a.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    onClick();
+                });
+            }
+            return a;
+        }
+
+        function createActive(label) {
+            var s = document.createElement('span');
+            s.className = 'active';
+            s.textContent = label;
+            return s;
+        }
+
+        function renderPager() {
+            totalPages = Math.max(1, Math.ceil(items.length / perPage));
+            currentPage = clampPage(currentPage);
+
+            pager.innerHTML = '';
+
+            if (totalPages <= 1) {
+                pager.style.display = 'none';
+                return;
+            }
+            pager.style.display = '';
+
+            pager.appendChild(createLink('←', function () { showPage(currentPage - 1); }, currentPage === 1));
+
+            // windowed page numbers (max 5)
+            var maxButtons = 5;
+            var half = Math.floor(maxButtons / 2);
+            var start = Math.max(1, currentPage - half);
+            var end = Math.min(totalPages, start + maxButtons - 1);
+            start = Math.max(1, end - maxButtons + 1);
+
+            if (start > 1) {
+                pager.appendChild(createLink('1', function () { showPage(1); }, false));
+                if (start > 2) {
+                    var dots = document.createElement('span');
+                    dots.textContent = '…';
+                    pager.appendChild(dots);
+                }
+            }
+
+            for (var p = start; p <= end; p++) {
+                if (p === currentPage) pager.appendChild(createActive(String(p)));
+                else pager.appendChild(createLink(String(p), (function (pp) { return function () { showPage(pp); }; })(p), false));
+            }
+
+            if (end < totalPages) {
+                if (end < totalPages - 1) {
+                    var dots2 = document.createElement('span');
+                    dots2.textContent = '…';
+                    pager.appendChild(dots2);
+                }
+                pager.appendChild(createLink(String(totalPages), function () { showPage(totalPages); }, false));
+            }
+
+            pager.appendChild(createLink('→', function () { showPage(currentPage + 1); }, currentPage === totalPages));
+        }
+
+        function recalc() {
+            columns = getColumns();
+            perPage = Math.max(1, columns * 2);
+            totalPages = Math.max(1, Math.ceil(items.length / perPage));
+            showPage(currentPage);
+        }
+
+        // init
+        showPage(1);
+        window.addEventListener('resize', function () {
+            // debounce resize a bit
+            clearTimeout(recalc._t);
+            recalc._t = setTimeout(recalc, 150);
+        });
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initAllProductsPagination);
+    } else {
+        initAllProductsPagination();
+    }
+})();
+</script>
 
 <!-- Testimonial Section -->
 <section class="testimonial-section" id="testimoni">

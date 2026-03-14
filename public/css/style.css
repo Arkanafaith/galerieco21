@@ -379,7 +379,10 @@ section:last-child::after {
 }
 
 .btn-primary {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
     background: linear-gradient(135deg, #fbbf24, #f97316, #ef4444);
     color: #ffffff;
     padding: 14px 32px;
@@ -395,6 +398,11 @@ section:last-child::after {
     position: relative;
     overflow: hidden;
     animation: fadeIn 1s ease 0.4s both;
+}
+
+.btn-primary svg {
+    display: block;
+    flex: 0 0 auto;
 }
 
 .btn-primary::before {
@@ -899,6 +907,40 @@ section:last-child::after {
 /* ========== BEST PRODUCTS SECTION - FIXED CARDS ========== */
 .best-products {
     padding: 60px 0;
+}
+
+/* Font card 3 produk terbaik = card produk biasa (kecil) */
+.best-products .product-card .product-info {
+    padding: 15px;
+}
+.best-products .product-card .product-name {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    line-height: 1.4;
+}
+.best-products .product-card .product-category {
+    font-size: 11px;
+    margin-bottom: 6px;
+}
+.best-products .product-card .product-rating {
+    margin-bottom: 10px;
+}
+.best-products .product-card .stars {
+    font-size: 11px;
+}
+.best-products .product-card .rating-count {
+    font-size: 10px;
+}
+.best-products .product-card .product-price {
+    font-size: 16px;
+    font-weight: 700;
+}
+.best-products .product-card .product-price-unit {
+    font-size: 10px;
+}
+.best-products .product-card .product-price-row {
+    padding-top: 10px;
 }
 
 .section-badge {
