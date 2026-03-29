@@ -436,11 +436,11 @@ $products = \App\Models\Product::all();
             <p>{{ ContentHelper::get('cta_subtitle', 'Kami punya pilihan istimewa untuk dibawa pulang.') }}</p>
             
             <div class="cta-buttons">
-                <a href="https://wa.me/6281234567890?text=Halo%20Galeri%20Eco%2021" target="_blank" class="btn-whatsapp">
+                <a href="https://wa.me/628112648830?text=Halo%20Galeri%20Eco%2021" target="_blank" class="btn-whatsapp">
                     <img class="btn-icon" src="{{ asset('images/icon/whatsapp.png') }}" alt="WhatsApp">
                     WhatsApp
                 </a>
-                <a href="https://www.tokopedia.com/search?q=galeri+eco+21" target="_blank" class="btn-tokopedia">
+                <a href="https://www.tokopedia.com/tokoeco21" target="_blank" class="btn-tokopedia">
                     <img class="btn-icon" src="{{ asset('images/icon/tokopedia.png') }}" alt="Tokopedia">
                     Tokopedia
                 </a>
